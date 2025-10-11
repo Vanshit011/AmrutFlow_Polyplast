@@ -13,20 +13,7 @@ const FilterSidebar = ({
 }) => {
   // Updated sections to reflect AGRI and SWR catalogues
   const filterSections = [
-    {
-      id: 'application',
-      title: 'Application',
-      icon: 'Wrench',
-      options: [
-        { value: 'irrigation', label: 'Irrigation Networks', count: 0 },
-        { value: 'drainage', label: 'Drainage Systems', count: 0 },
-        // Keep others for future categories if present in data
-        { value: 'plumbing', label: 'Plumbing Systems', count: 0 },
-        { value: 'electrical', label: 'Electrical Conduits', count: 0 },
-        { value: 'industrial', label: 'Industrial Applications', count: 0 }
-      ]
-    },
-    {
+      {
       id: 'category',
       title: 'Product Category',
       icon: 'Package',
@@ -34,26 +21,31 @@ const FilterSidebar = ({
         { value: 'agri-fittings', label: 'Agri Fittings', count: 0 },
         { value: 'swr-fittings', label: 'SWR Fittings', count: 0 },
         { value: 'swr-accessories', label: 'SWR Accessories', count: 0 },
-        // Generic categories retained if other SKUs exist
-        { value: 'pipes', label: 'Pipes & Tubes', count: 0 },
-        { value: 'fittings', label: 'Fittings & Joints', count: 0 },
-        { value: 'valves', label: 'Valves & Controls', count: 0 },
-        { value: 'accessories', label: 'Accessories', count: 0 }
       ]
     },
     {
-      // Size filtering mapped to variant sizes, grouped as common ranges
-      id: 'sizeRange',
-      title: 'Size Range',
-      icon: 'Ruler',
+      id: 'application',
+      title: 'Application',
+      icon: 'Wrench',
       options: [
-        { value: '15-25mm', label: '15-25mm', count: 0 },
-        { value: '32-50mm', label: '32-50mm', count: 0 },
-        { value: '63-90mm', label: '63-90mm', count: 0 },
-        { value: '110-160mm', label: '110-160mm', count: 0 },
-        { value: '200mm+', label: '200mm & Above', count: 0 }
+        { value: 'irrigation', label: 'Irrigation Networks', count: 0 },
+        { value: 'drainage', label: 'Drainage Systems', count: 0 },
       ]
     },
+  
+    // {
+    //   // ✅ Actual size ranges based on your dataset
+    //   id: 'sizeRange',
+    //   title: 'Size Range',
+    //   icon: 'Ruler',
+    //   options: [
+    //     { value: '63mm-110mm', label: '63mm - 110mm', count: 0 },
+    //     { value: '75mm-110mm', label: '75mm - 110mm', count: 0 },
+    //     { value: '110x75', label: '110×75', count: 0 },
+    //     { value: '110x110', label: '110×110', count: 0 },
+    //     { value: '110x75-110x110', label: '110×75 - 110×110', count: 0 },
+    //   ]
+    // },
     {
       id: 'certification',
       title: 'Certifications',
@@ -66,29 +58,6 @@ const FilterSidebar = ({
       ]
     }
   ];
-
-  // Map UI size ranges to a predicate so consumers can filter by variants
-  // Consumers: ensure the catalogue list/filter logic checks product.variants.some(size in range)
-   const sizeRangePredicate = (range, variantSizeText) => {
-    // Extract primary numeric from sizes like "75MM", "110", or "110×75"
-    const firstNum = (() => {
-      if (!variantSizeText) return null;
-      const txt = String(variantSizeText).toLowerCase().replace('mm','');
-      const parts = txt.split(/[x×/ -]/).filter(Boolean);
-      const n = parseFloat(parts[0]);
-      return Number.isFinite(n) ? n : null;
-    })();
-
-    if (firstNum == null) return false;
-    switch (range) {
-      case '15-25mm': return firstNum >= 15 && firstNum <= 25;
-      case '32-50mm': return firstNum >= 32 && firstNum <= 50;
-      case '63-90mm': return firstNum >= 63 && firstNum <= 90;
-      case '110-160mm': return firstNum >= 110 && firstNum <= 160;
-      case '200mm+': return firstNum >= 200;
-      default: return false;
-    }
-  };
 
   const handleCheckboxChange = (sectionId, optionValue, checked) => {
     const currentValues = filters?.[sectionId] || [];
